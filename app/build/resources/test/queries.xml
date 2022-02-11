@@ -1,0 +1,27 @@
+<queries>
+    <sql id="findActors" paramType="org.foo.Bar">
+        <![CDATA[
+SELECT * FROM actor WHERE actor_id=${actor_id} AND last_name=${last_name};
+]]>
+    </sql>
+    <sql id="findManyActors" paramType="org.foo.Bar">
+        <![CDATA[
+SELECT * FROM actor WHERE last_name=${last_name};
+]]>
+    </sql>
+    <sql id="updateActor" paramType="org.foo.Bar">
+        <![CDATA[
+update actor set first_name=${first_name}, last_name=${last_name} where actor_id=${actor_id};
+]]>
+    </sql>
+    <sql id="insertActor" paramType="org.foo.Bar">
+        <![CDATA[
+insert into actor (first_name, last_name) values (${first_name}, ${last_name});
+]]>
+    </sql>
+    <sql id="deleteActor" paramType="org.foo.Bar">
+        <![CDATA[
+delete from actor where first_name=${first_name};
+]]>
+    </sql>
+</queries>

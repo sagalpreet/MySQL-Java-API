@@ -1,0 +1,2 @@
+Fri Feb 11 01:11:12 IST 2022
+1delete from actor where first_name='SAGALPREET';
