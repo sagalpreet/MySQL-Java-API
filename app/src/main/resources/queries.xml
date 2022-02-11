@@ -1,0 +1,12 @@
+<queries>
+    <sql id="findActors" paramType="org.foo.Bar">
+        <![CDATA[
+SELECT * FROM actor WHERE actor_id<${actor_id} AND first_name=${first_name};
+]]>
+    </sql>
+    <sql id="addMovie" paramType="org.foo.Bar">
+        <![CDATA[
+INSERT INTO my_table(x, y, x) VALUES(${propX}, ${propY}, ${propZ});
+]]>
+    </sql>
+</queries>
