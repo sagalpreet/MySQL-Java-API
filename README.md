@@ -1,5 +1,7 @@
 Submitter name: Sagalpreet Singh
+
 Roll No.: 2019csb1113
+
 Course: CS305
 
 =================================
@@ -19,6 +21,7 @@ The first of these is the constructor for the MySql class and rest all are stand
 Note that these methods represent the API, there are additional methods which are used as utilities in these methods, but they are private, or in other words they are present in library but not in API.
 
 #### File Structure
+```
 .
 ├── app
 │   ├── bin
@@ -186,6 +189,7 @@ Note that these methods represent the API, there are additional methods which ar
 ├── gradlew.bat
 ├── README.md
 └── settings.gradle.kts
+```
 
 76 directories, 90 files
 
