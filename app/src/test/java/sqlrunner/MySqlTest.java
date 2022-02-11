@@ -8,9 +8,67 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MySqlTest {
     private MySql msql;
+
+    public int testInsertActor(String queryId, ArrayList<String> values) {
+        int res = -1;
+
+        Create queryParam = new Create(values);
+
+        try {
+            msql = new MySql("src/test/resources/queries.xml", "cs305", "password", "sakila");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            res = msql.insert(queryId, queryParam);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+    public int testInsertActorWithDate(String queryId, String first_name, String last_name, Date date) {
+        int res = -1;
+
+        InsertActorsParamWithDate queryParam = new InsertActorsParamWithDate(first_name, last_name, date);
+
+        try {
+            msql = new MySql("src/test/resources/queries.xml", "cs305", "password", "sakila");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            res = msql.insert(queryId, queryParam);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+    @Test
+    public void insertTest() {
+        int res = -1;
+
+        res = testInsertActor(
+            "create",
+            new ArrayList<String> (Arrays.asList("CHARLIE", "CHAPLIN")));
+        assertEquals(res, 1);
+
+        res = testInsertActorWithDate(
+            "createWithDate",
+            "DWAYNE",
+            "JOHNSON",
+            new Date(1000000000)); //1970-01-12 19:16:40
+        assertEquals(res, 1);
+    }
 
     @Test
     public void shouldSelectOne() {
@@ -67,7 +125,7 @@ public class MySqlTest {
     @Test
     public void shouldUpdate() {
         String queryId = "updateActor";
-        UpdateActorsParam queryParam = new UpdateActorsParam("TOM", "HOLLAND", 1);
+        UpdateActorsParam queryParam = new UpdateActorsParam("TOMMY", "HOLLAND", 1);
 
         try {
             msql = new MySql("src/test/resources/queries.xml", "cs305", "password", "sakila");
