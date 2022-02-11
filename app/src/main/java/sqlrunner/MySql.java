@@ -5,6 +5,7 @@ import java.lang.reflect.*;
 import java.sql.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
 import java.util.regex.*;
@@ -27,7 +28,7 @@ public class MySql implements SqlRunner {
          * and establish database connection
          */
         this.xmlReader = new Reader(path);
-        
+
         // catch exception if any while initializing database connection
         try {
             this.connection = dbConnect(username, password, database);
@@ -39,17 +40,65 @@ public class MySql implements SqlRunner {
     private <T> String toSqlString(Field field, T queryParam) throws Exception {
         // converts the java type to sql type as a string
 
-        String sqlString = String.valueOf(field.get(queryParam));
+        String[] commonTypes = {"class java.lang.Integer", "class java.lang.Float", "class java.lang.Double", "class java.lang.Boolean", "class java.lang.String"};
+
+        // String sqlString = String.valueOf(field.get(queryParam));
+        String sqlString = null;
         String fieldType = field.getType().toString();
 
+        // handling primitive data types
+        if (fieldType.substring(0, Math.min(3, fieldType.length())).equals("int") ||
+        fieldType.substring(0, Math.min(7, fieldType.length())).equals("boolean") ||
+        fieldType.substring(0, Math.min(5, fieldType.length())).equals("float") ||
+        fieldType.substring(0, Math.min(6, fieldType.length())).equals("double") ||
+        fieldType.substring(0, Math.min(4, fieldType.length())).equals("char") ||
+        fieldType.substring(0, Math.min(5, fieldType.length())).equals("short") ||
+        fieldType.substring(0, Math.min(4, fieldType.length())).equals("long") ||
+        fieldType.substring(0, Math.min(5, fieldType.length())).equals("byte")
+        ) {
+            sqlString = "'" + String.valueOf(field.get(queryParam)) + "'";
+        }
+
+        // handling some common java classes
+        else if (Arrays.asList(commonTypes).contains(fieldType)) {
+            sqlString = "'" + String.valueOf(field.get(queryParam)) + "'";
+        }
+
         // dates need to be handled separately
-        if (fieldType.equals("class java.util.Date")) {
+        else if (fieldType.equals("class java.util.Date")) {
             try {
                 Date fieldValue = (Date) field.get(queryParam);
-                sqlString = MysqlDate.toMysqlDate(fieldValue);
+                sqlString = "'" + MysqlDate.toMysqlDate(fieldValue) + "'";
             } catch (Exception e) {
                 throw e;
             }
+        }
+
+        // arrays need to be handled separately
+        else if (fieldType.equals("class java.util.ArrayList")) {
+            try {
+                // cast queryParam into array list to make it iterable
+                ArrayList<?> ar = ArrayList.class.cast(field.get(queryParam));
+                if (ar.size() == 0) {
+                    sqlString = "()";
+                } else {
+
+                    sqlString = "(" + "'" + String.valueOf(ar.get(0)) + "'";
+
+                    for (int i = 1; i < ar.size(); i++) {
+                        sqlString += ',';
+                        sqlString += "'" + String.valueOf(ar.get(i)) + "'";
+                    }
+
+                    sqlString += ')';
+                }
+            } catch (Exception e) {
+                throw e;
+            }
+        }
+
+        else {
+            throw new Exception("Datatype not supported");
         }
 
         return sqlString;
@@ -92,7 +141,7 @@ public class MySql implements SqlRunner {
 
                 // value needs to be enclosed in single quotes for mysql
                 // mysql convert strings to data types intelligently
-                replacements.put(match, "'" + fieldValue + "'");
+                replacements.put(match, fieldValue);
 
             } catch (Exception e) {
                 throw e;
@@ -145,7 +194,7 @@ public class MySql implements SqlRunner {
          * for any query which does not get
          * a set output
          * 
-         * so, this works for delete and 
+         * so, this works for delete and
          * insert as well
          * 
          * returns the number of rows affected
@@ -224,7 +273,7 @@ public class MySql implements SqlRunner {
 
         // all the rows need to be returned
         // ArrayList is used for this purpose
-        List<R> results = new ArrayList<R> ();
+        List<R> results = new ArrayList<R>();
 
         R result = null;
 
@@ -250,7 +299,7 @@ public class MySql implements SqlRunner {
         return results;
     }
 
-    public <T> int update(String queryId, T queryParam) throws Exception{
+    public <T> int update(String queryId, T queryParam) throws Exception {
         HashMap<String, String> querySyntax;
 
         // fetch query syntax from xml
@@ -267,7 +316,7 @@ public class MySql implements SqlRunner {
         return sendUpdateQuery(query);
     }
 
-    public <T> int insert(String queryId, T queryParam) throws Exception{
+    public <T> int insert(String queryId, T queryParam) throws Exception {
         HashMap<String, String> querySyntax;
 
         // fetch query syntax from xml
@@ -279,15 +328,14 @@ public class MySql implements SqlRunner {
 
         // construct query dynamically
         String query = constructQuery(querySyntax.get("query"), queryParam);
-
         // return the number of rows modified
         return sendUpdateQuery(query);
     }
 
-    public <T> int delete(String queryId, T queryParam) throws Exception{
+    public <T> int delete(String queryId, T queryParam) throws Exception {
         HashMap<String, String> querySyntax;
 
-         // fetch query syntax from xml
+        // fetch query syntax from xml
         try {
             querySyntax = xmlReader.fetchQuerySyntax(queryId);
         } catch (Exception e) {
