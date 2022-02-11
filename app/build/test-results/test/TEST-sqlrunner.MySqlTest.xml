@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="sqlrunner.MySqlTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-02-11T11:19:39" hostname="den" time="0.586">
+<testsuite name="sqlrunner.MySqlTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-02-11T16:02:20" hostname="den" time="0.637">
   <properties/>
-  <testcase name="shouldDelete()" classname="sqlrunner.MySqlTest" time="0.431"/>
-  <testcase name="shouldInsert()" classname="sqlrunner.MySqlTest" time="0.045"/>
-  <testcase name="shouldUpdate()" classname="sqlrunner.MySqlTest" time="0.024"/>
-  <testcase name="shouldSelectMany()" classname="sqlrunner.MySqlTest" time="0.056"/>
-  <testcase name="shouldSelectOne()" classname="sqlrunner.MySqlTest" time="0.027"/>
+  <testcase name="shouldDelete()" classname="sqlrunner.MySqlTest" time="0.442"/>
+  <testcase name="shouldInsert()" classname="sqlrunner.MySqlTest" time="0.055"/>
+  <testcase name="shouldUpdate()" classname="sqlrunner.MySqlTest" time="0.028"/>
+  <testcase name="shouldSelectMany()" classname="sqlrunner.MySqlTest" time="0.07"/>
+  <testcase name="shouldSelectOne()" classname="sqlrunner.MySqlTest" time="0.038"/>
   <system-out><![CDATA[delete from actor where first_name='SAGALPREET';
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>

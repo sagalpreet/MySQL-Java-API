@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="cs305_2022.AppTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-02-11T11:19:39" hostname="den" time="0.019">
+<testsuite name="cs305_2022.AppTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-02-11T16:02:20" hostname="den" time="0.018">
   <properties/>
-  <testcase name="appHasAGreeting()" classname="cs305_2022.AppTest" time="0.019"/>
+  <testcase name="appHasAGreeting()" classname="cs305_2022.AppTest" time="0.018"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
